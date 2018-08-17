@@ -19,10 +19,4 @@ public class RegisterDto {
 
     @NotNull
     private String email;
-
-    private String gender;
-
-    private String introduce;
-
-    private String phoneNumber;
 }

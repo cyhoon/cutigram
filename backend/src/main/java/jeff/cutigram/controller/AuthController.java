@@ -10,6 +10,11 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @GetMapping("/")
+    public String test() {
+        return "test";
+    }
+
     @PostMapping("/login")
     public String login() {
         return "login";
@@ -18,7 +23,7 @@ public class AuthController {
     @PostMapping("/register")
     public String register(@Valid @RequestBody RegisterDto dto) {
         final String password = dto.getPassword();
-
+        System.out.println("여기 안옴?");
         return "register";
     }
 }
