@@ -16,7 +16,4 @@ public class RegisterDto {
 
     @NotNull
     private String displayName;
-
-    @NotNull
-    private String email;
 }

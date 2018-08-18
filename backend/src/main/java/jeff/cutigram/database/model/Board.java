@@ -1,6 +1,5 @@
 package jeff.cutigram.database.model;
 
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
