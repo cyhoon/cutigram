@@ -1,6 +1,8 @@
 package jeff.cutigram.database.model;
 
 import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,10 +20,12 @@ public class Board {
     private String content;
 
     @Column(name = "write_date")
-    private LocalDateTime writeDate = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime writeDate;
 
     @Column(name = "modify_date")
-    private LocalDateTime modifyDate = LocalDateTime.now();
+    @UpdateTimestamp
+    private LocalDateTime modifyDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
