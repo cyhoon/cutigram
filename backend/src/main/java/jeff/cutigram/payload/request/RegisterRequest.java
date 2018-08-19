@@ -1,4 +1,4 @@
-package jeff.cutigram.dto.auth;
+package jeff.cutigram.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class RegisterDto {
+public class RegisterRequest {
     @NotNull
     private String userId;
 
