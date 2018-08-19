@@ -53,8 +53,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (StringUtils.hasText(cutigramToken) && cutigramToken.startsWith("Cutigram ")) {
             return cutigramToken.substring(9, cutigramToken.length());
+        } else {
+            return null;
         }
-
-        return null;
     }
 }
