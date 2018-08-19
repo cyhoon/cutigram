@@ -41,12 +41,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUserId(),
-                        loginRequest.getPassword()
-                )
-        );
+        Authentication authentication = authenticate(loginRequest.getUserId(), loginRequest.getPassword());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -69,10 +64,8 @@ public class AuthController {
         Objects.requireNonNull(userId);
         Objects.requireNonNull(password);
 
-        Authentication authentication;
-
         try {
-            return authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId, password));
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userId, password));
         } catch (DisabledException e) {
             throw new AuthenticationException("User is disabled!", e);
         } catch (BadCredentialsException e) {
