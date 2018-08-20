@@ -1,5 +1,6 @@
 package jeff.cutigram.database.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,13 @@ public class BoardFile {
 
     @Column(name = "file_src", nullable = false)
     private String fileSrc;
+
+    @Builder
+    public BoardFile(String fileType, String fileSrc, Board board) {
+        this.fileType = fileType;
+        this.fileSrc = fileSrc;
+        this.board = board;
+    }
 
     @ManyToOne
     @JoinColumn(name = "board_idx", referencedColumnName = "idx", nullable = false, updatable = false)
