@@ -1,6 +1,8 @@
 package jeff.cutigram.database.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +29,12 @@ public class Board {
     @Column(name = "modify_date")
     @UpdateTimestamp
     private LocalDateTime modifyDate;
+
+    @Builder
+    public Board(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
