@@ -1,13 +1,15 @@
 package jeff.cutigram.controller;
 
 import jeff.cutigram.database.model.Board;
+import jeff.cutigram.database.model.BoardLike;
 import jeff.cutigram.database.model.User;
 import jeff.cutigram.payload.request.BoardDeleteRequest;
 import jeff.cutigram.payload.request.BoardModifyRequest;
 import jeff.cutigram.payload.request.BoardRequest;
 import jeff.cutigram.payload.response.ApiResponse;
-import jeff.cutigram.payload.response.CreateBoardResponse;
+import jeff.cutigram.payload.response.BoardCreateResponse;
 import jeff.cutigram.security.CurrentUser;
+import jeff.cutigram.service.BoardLikeService;
 import jeff.cutigram.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,9 @@ public class BoardController {
 
     @Autowired
     BoardService boardService;
+
+    @Autowired
+    BoardLikeService boardLikeService;
 
     @GetMapping("/list")
     public String getBoards() { // 게시글 전체 조회
@@ -41,7 +46,7 @@ public class BoardController {
         Board board = boardService.createBoard(boardRequest, currentUser);
         boardService.createBoardFiles(boardRequest.getFiles(), board);
 
-        return ResponseEntity.ok(new CreateBoardResponse(
+        return ResponseEntity.ok(new BoardCreateResponse(
                 true,
                 "게시글 작성 성공",
                 board.getIdx(),
@@ -58,11 +63,7 @@ public class BoardController {
     @PutMapping
     public ResponseEntity<?> modifyBoard(
             @CurrentUser User currentUser,
-            @Valid BoardModifyRequest boardModifyRequest) {
-
-        // 현재 글쓴 사용자와 같은지 확인
-        // 같다면 수정하고 수정한 값을 응답주면됨.
-        // 아니라면 실패했다고 알려줌.
+            @Valid @RequestBody BoardModifyRequest boardModifyRequest) {
 
         // 해당 게시글에 작성자가 아닐 경우
         if(!boardService.isWriter(boardModifyRequest.getIdx(), currentUser)) {
@@ -77,19 +78,58 @@ public class BoardController {
         return ResponseEntity.ok(new ApiResponse(true, "수정 완료"));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{boardIdx}")
     public ResponseEntity<?> deleteBoard(
             @CurrentUser User currentUser,
-            @Valid BoardDeleteRequest boardDeleteRequest) { // 삭제
+            @Valid @PathVariable Long boardIdx) { // 삭제
 
         // 해당 게시글에 작성자가 아닐 경우
-
-        if(!boardService.isWriter(boardDeleteRequest.getIdx(), currentUser)) {
-            return ResponseEntity.ok(new ApiResponse(false, "수정 실패"));
+        if(!boardService.isWriter(boardIdx, currentUser)) {
+            return ResponseEntity.ok(new ApiResponse(false, "삭제 실패"));
         }
 
-        boardService.deleteBoard(boardDeleteRequest.getIdx());
+        boardService.deleteBoard(boardIdx);
 
         return ResponseEntity.ok(new ApiResponse(true, "삭제 완료"));
+    }
+
+    @PostMapping("/{boardIdx}/like")
+    public ResponseEntity<?> boardLike(
+            @CurrentUser User currentUser,
+            @Valid @PathVariable Long boardIdx) {
+
+        Board board = boardService.getBoard(boardIdx); // 게시글이 있는지 조회
+
+        // 이미 좋아요를 눌렀는지 확인 후 눌렀다면 false 응답.
+        // 좋아요를 눌렀는지 검사한다.
+        BoardLike isLike = boardLikeService.isLike(board, currentUser);
+        if (board == null || isLike != null) {
+            // error
+            return ResponseEntity.ok(new ApiResponse(false, "fail"));
+        }
+
+        boardLikeService.saveLike(board, currentUser); // 좋아요 등록
+
+        return ResponseEntity.ok(new ApiResponse(true, "success"));
+    }
+
+    @PostMapping("/{boardIdx}/unlike")
+    public ResponseEntity<?> boardUnLike(
+            @CurrentUser User currentUser,
+            @Valid @PathVariable Long boardIdx) {
+
+        Board board = boardService.getBoard(boardIdx); // 게시글이 있는지 조회
+        BoardLike isLike = boardLikeService.isLike(board, currentUser);
+
+        // 이미 좋아요를 눌렀는지 확인 후 눌렀다면 false 응답.
+        // 좋아요를 눌렀는지 검사한다.
+        if (board == null || null == isLike) {
+            // error
+            return ResponseEntity.ok(new ApiResponse(false, "fail"));
+        }
+
+        boardLikeService.deleteLike(isLike);
+
+        return ResponseEntity.ok(new ApiResponse(true, "success"));
     }
 }
