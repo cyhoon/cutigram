@@ -1,11 +1,11 @@
-package jeff.cutigram.payload.response;
+package jeff.cutigram.payload.response.Board;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class FileResponse {
+public class BoardFileResponse {
     private Long idx;
     private String fileType;
     private String fileSrc;
