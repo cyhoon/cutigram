@@ -1,5 +1,7 @@
 package jeff.cutigram.database.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,7 @@ public class User implements UserDetails {
     private String id;
 
     @Column(nullable = false, length = 200)
+    @JsonIgnoreProperties
     private String password;
 
     @Column(name = "display_name", nullable = false, length = 50)
@@ -81,7 +84,7 @@ public class User implements UserDetails {
 //    private Board board;
 //
 //    @OneToMany(mappedBy = "board_like")
-//    private BoardLike boardLike;
+//    private BoardLikeResponse boardLike;
 //
 //    @OneToMany(mappedBy = "comment")
 //    private Comment comment;

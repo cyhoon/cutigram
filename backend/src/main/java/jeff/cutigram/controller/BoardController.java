@@ -3,11 +3,10 @@ package jeff.cutigram.controller;
 import jeff.cutigram.database.model.Board;
 import jeff.cutigram.database.model.BoardLike;
 import jeff.cutigram.database.model.User;
-import jeff.cutigram.payload.request.BoardDeleteRequest;
 import jeff.cutigram.payload.request.BoardModifyRequest;
 import jeff.cutigram.payload.request.BoardRequest;
-import jeff.cutigram.payload.response.ApiResponse;
-import jeff.cutigram.payload.response.BoardCreateResponse;
+import jeff.cutigram.payload.response.*;
+import jeff.cutigram.payload.response.Board.BoardListResponse;
 import jeff.cutigram.security.CurrentUser;
 import jeff.cutigram.service.BoardLikeService;
 import jeff.cutigram.service.BoardService;
@@ -16,6 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+
+// 컨트롤은 컨트롤 답게
+// 서비스에서는 주요 로직을 작성한다.
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -29,13 +32,14 @@ public class BoardController {
     BoardLikeService boardLikeService;
 
     @GetMapping("/list")
-    public String getBoards() { // 게시글 전체 조회
-        return "getBoard";
+    public BoardListResponse getBoards() { // 게시글 전체 조회
+        return boardService.listBoard();
     }
 
     @GetMapping("/{boardIdx}")
-    public Long getBoard(@PathVariable Long boardIdx) { // 게시글 상세 조회
-        return boardIdx;
+    public jeff.cutigram.payload.response.Board.BoardResponse getBoard(@PathVariable Long boardIdx) { // 게시글 상세 조회
+
+        return boardService.detailBoard(boardIdx);
     }
 
     @PostMapping

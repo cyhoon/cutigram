@@ -1,5 +1,8 @@
 package jeff.cutigram.database.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +19,7 @@ import java.time.LocalDateTime;
 public class BoardLike {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idx;
+    private Long idx;
 
     @Column(name = "push_date")
     @CreationTimestamp
@@ -27,7 +30,8 @@ public class BoardLike {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "board_idx", referencedColumnName = "idx", nullable = false, updatable = false)
+    @JsonBackReference
+//    @JoinColumn(name = "board_idx", referencedColumnName = "idx", nullable = false, updatable = false)
     private Board board;
 
     @Builder
