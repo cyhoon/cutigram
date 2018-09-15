@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
         final String userId = registerRequest.getUserId();
         final String password = passwordEncoder.encode(registerRequest.getPassword());
         final String displayName = registerRequest.getDisplayName();
+        final String photoSrc = "http://10.80.163.99:8080/uploads/image/png/base_user_profile.png";
 
         if (userRepository.existsById(userId)) throw new UserDuplicatedValueException("id");
 
@@ -35,6 +36,7 @@ public class UserService implements UserDetailsService {
                 .id(userId)
                 .password(password)
                 .displayName(displayName)
+                .photoSrc(photoSrc)
                 .build();
 
         return userRepository.save(user);
@@ -60,6 +62,14 @@ public class UserService implements UserDetailsService {
                 .id(user.getId())
                 .password(user.getPassword())
                 .displayName(user.getDisplayName())
+                .photoSrc(user.getPhotoSrc())
                 .build();
+    }
+
+    @Transactional
+    public User updateUserProfile(String userId, String photoSrc) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
+        user.setPhotoSrc(photoSrc);
+        return userRepository.save(user);
     }
 }

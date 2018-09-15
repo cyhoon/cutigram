@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="mainColor">#262626</color>
     <color name="white">#FFFFFF</color>
+    <color name="actionbarColor">#fafafa</color>
+    <color name="actionbarBorderColor">#ebebeb</color>
     <color name="textEditBgColor">#fafafa</color>
     <color name="editBorderColor">#ebebeb</color>
 </resources>

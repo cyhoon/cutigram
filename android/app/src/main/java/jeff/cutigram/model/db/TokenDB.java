@@ -2,7 +2,7 @@ package jeff.cutigram.model.db;
 
 import io.realm.RealmObject;
 
-public class TokenDB extends RealmObject{
+public class TokenDB extends RealmObject {
     private String accessToken;
     private String tokenType;
 

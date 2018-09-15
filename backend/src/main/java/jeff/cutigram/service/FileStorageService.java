@@ -18,7 +18,8 @@ import java.util.Random;
 @Service
 public class FileStorageService {
 
-    private String uploadHost = "localhost:8080/uploads/";
+    private String uploadHost = "http://10.80.163.99:8080/uploads/";
+//    private String uploadHost = "http://172.20.10.2:8080/uploads/";
 
     @Value("${file.uploadDir}")
     private String rootUploadDir;

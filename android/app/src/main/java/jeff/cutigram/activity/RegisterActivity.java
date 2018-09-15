@@ -1,7 +1,8 @@
 package jeff.cutigram.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 import jeff.cutigram.R;
 import jeff.cutigram.interfaces.FlowService;
 import jeff.cutigram.lib.Encryption;
+import jeff.cutigram.lib.TokenLib;
+import jeff.cutigram.lib.UserLib;
 import jeff.cutigram.model.Token;
 import jeff.cutigram.model.request.UserRegister;
 import jeff.cutigram.network.RetrofitSingleton;
@@ -23,11 +26,16 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText userIdEditText;
     private EditText userPwEditText;
     private EditText userNameEditText;
+    private TokenLib tokenLib;
+    private UserLib userLib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        tokenLib = new TokenLib();
+        userLib = new UserLib();
 
         registerButton = findViewById(R.id.register_button);
         userIdEditText = findViewById(R.id.user_id);
@@ -40,6 +48,11 @@ public class RegisterActivity extends AppCompatActivity {
                 requestRegister(userIdEditText.getText().toString(), userPwEditText.getText().toString(), userNameEditText.getText().toString());
             }
         });
+    }
+
+    private void isToken() {
+//        Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+//        startActivity(registerIntent);
     }
 
     private void requestRegister(String id, String pw, String name) {
@@ -55,6 +68,12 @@ public class RegisterActivity extends AppCompatActivity {
             public void onResponse(Call<Token> call, Response<Token> response) {
                 switch (response.code()) {
                     case 200:
+                        Token token = response.body();
+                        tokenLib.saveToken(getApplicationContext(), token.getAccessToken(), token.getTokenType());
+                        userLib.saveUser(getApplicationContext(), userId);
+                        Intent goHome = new Intent(RegisterActivity.this, HomeActivity.class);
+                        startActivity(goHome);
+                        finish();
                         break;
                     case 409:
                         System.out.println("유저 아이디 중복");

@@ -114,7 +114,10 @@ public class BoardController {
 
         boardLikeService.saveLike(board, currentUser); // 좋아요 등록
 
-        return ResponseEntity.ok(new ApiResponse(true, "success"));
+        // 좋아요 수를 message로 보냄
+        String likeCount = String.valueOf(boardLikeService.getLikeCount(board));
+
+        return ResponseEntity.ok(new ApiResponse(true, likeCount));
     }
 
     @PostMapping("/{boardIdx}/unlike")
@@ -134,6 +137,9 @@ public class BoardController {
 
         boardLikeService.deleteLike(isLike);
 
-        return ResponseEntity.ok(new ApiResponse(true, "success"));
+        // 좋아요 수를 message로 보냄
+        String likeCount = String.valueOf(boardLikeService.getLikeCount(board));
+
+        return ResponseEntity.ok(new ApiResponse(true, likeCount));
     }
 }

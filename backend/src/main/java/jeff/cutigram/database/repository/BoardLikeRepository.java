@@ -15,4 +15,5 @@ import java.util.Optional;
 public interface BoardLikeRepository extends CrudRepository<BoardLike, Long> {
 
     Optional<BoardLike> findByBoardAndUser(Board board, User user);
+    long countByBoard(Board board);
 }

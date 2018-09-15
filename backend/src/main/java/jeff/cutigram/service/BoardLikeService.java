@@ -28,6 +28,11 @@ public class BoardLikeService {
         );
     }
 
+    public long getLikeCount(Board board) {
+//        return boardLikeRepository.countByIdx(board.getIdx());
+        return boardLikeRepository.countByBoard(board);
+    }
+
     public void deleteLike(BoardLike boardLike) {
         boardLikeRepository.delete(boardLike);
     }

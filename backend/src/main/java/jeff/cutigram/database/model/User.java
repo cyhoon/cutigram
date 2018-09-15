@@ -44,10 +44,11 @@ public class User implements UserDetails {
     private String photoSrc;
 
     @Builder
-    public User(String id, String password, String displayName) {
+    public User(String id, String password, String displayName, String photoSrc) {
         this.id = id;
         this.password = password;
         this.displayName = displayName;
+        this.photoSrc = photoSrc;
     }
 
     @Override
